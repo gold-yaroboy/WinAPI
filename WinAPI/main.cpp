@@ -1,5 +1,9 @@
 #include<Windows.h>
 #include"resource.h"
+#include <commctrl.h> // Может понадобиться для EM_SETCUEBANNER, хотя обычно есть в Windows.h
+#pragma comment(lib, "comctl32.lib") // Для поддержки общих элементов управления
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -31,8 +35,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
+
+		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		HWND hEditPassword = GetDlgItem(hwnd, IDC_EDIT_PASSWORD);
+		SendMessage(hEditLogin, EM_SETCUEBANNER, TRUE, (LPARAM)L"Введите логин");
+		SendMessage(hEditPassword, EM_SETCUEBANNER, TRUE, (LPARAM)L"Введите пароль");
 	}
-			break;
+	break;
 		case WM_COMMAND:
 			switch (LOWORD(wParam))
 			{
