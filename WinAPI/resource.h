@@ -4,7 +4,7 @@
 //
 #define IDI_ICON1                       103
 #define IDC_STATIC_LOGIN                1001
-#define IDD_DIALOG1                     1001
+#define IDD_DIALOG_MAIN                     1001
 #define IDC_STATIC_PASSWORD             1002
 #define IDC_EDIT_LOGIN                  1003
 #define IDC_EDIT_PASSWORD               1004
