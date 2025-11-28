@@ -1,4 +1,5 @@
 #include<Windows.h>
+#include"resource.h"
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My first window";
 
@@ -14,9 +15,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_AMERICA));
+	wClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_GAME));
+	//wClass.hIconSm = (HICON)LoadImage(hInstance, "america.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	//wClass.hIcon   = (HICON)LoadImage(hInstance, "game.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+
+	//wClass.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));
+	wClass.hCursor = (HCURSOR)LoadImage
+	(
+		hInstance, 
+		"starcraft-medium-sized-version\\SC2-cursor.cur",
+		IMAGE_CURSOR, 
+		LR_DEFAULTSIZE, LR_DEFAULTSIZE,
+		LR_LOADFROMFILE);
 	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
 	wClass.hInstance = hInstance;
@@ -37,7 +48,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		g_sz_WINDOW_CLASS,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		CW_USEDEFAULT, CW_USEDEFAULT,
+		640, 480,
 		NULL,
 		NULL,
 		hInstance,
@@ -52,9 +63,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
+	MSG msg;
+	while (GetMessage(&msg, NULL, 0, 0) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 
-
-	return 0;
+	return msg.wParam;
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -62,6 +78,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
+		MessageBox(hwnd, "Cursor check", "Info", MB_OK | MB_ICONINFORMATION);
 		break;
 	case WM_COMMAND:
 		break;
