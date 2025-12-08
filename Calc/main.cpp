@@ -246,7 +246,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			input = input_operation = FALSE;
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)"0");
 		}
-		if (LOWORD(wParam) == IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
+		if (LOWORD(wParam) >= IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
 		{	
 			if(input)
 			{
