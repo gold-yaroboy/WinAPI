@@ -209,8 +209,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL
 		);
 		SetSkin(hwnd, "square_blue");
-	}
-		break;
+	}break;
+
 	case WM_COMMAND:
 	{
 		static DOUBLE a = DBL_MIN, b = DBL_MIN;
@@ -300,8 +300,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
 
-	}
-		break;
+	}break;
+
 	case WM_KEYDOWN:
 	{
 		if (GetKeyState(VK_SHIFT) < 0 && wParam == '8')
@@ -328,8 +328,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			case VK_ESCAPE:    SendMessage(GetDlgItem(hwnd, IDC_BUTTON_CLR),   BM_SETSTATE, TRUE, 0); break;
 			case VK_RETURN:    SendMessage(GetDlgItem(hwnd, IDC_BUTTON_EQUAL), BM_SETSTATE, TRUE, 0); break;
 		}
-	}
-	break;
+	}break;
+
 	case WM_KEYUP:
 	{
 		if (GetKeyState(VK_SHIFT) < 0 && wParam == '8')
@@ -408,18 +408,46 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(GetDlgItem(hwnd, IDC_BUTTON_EQUAL), BM_SETSTATE, FALSE, 0); 
 			break;
 		}
-	}
-		break;
+	}break;
+
+	case WM_CONTEXTMENU:
+	{
+		HMENU cmMain = CreatePopupMenu();
+		AppendMenu(cmMain, MF_STRING, IDM_SQUARE_BLUE, "Square blue");
+		AppendMenu(cmMain, MF_STRING, IDM_METAL_MISTRAL, "Metal mistral");
+		AppendMenu(cmMain, MF_SEPARATOR, NULL, NULL);
+		AppendMenu(cmMain, MF_STRING, IDM_EXIT, "Exit");
+
+		BOOL selected_item = TrackPopupMenuEx
+		(
+			cmMain,
+			TPM_RIGHTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_VERNEGANIMATION,
+			LOWORD(lParam), HIWORD(lParam),
+			hwnd,
+			NULL
+		);
+
+		switch (selected_item)
+		{
+		case IDM_SQUARE_BLUE:   SetSkin(hwnd, "square_blue"); break;
+		case IDM_METAL_MISTRAL: SetSkin(hwnd, "metal_mistral"); break;
+		case IDM_EXIT:			SendMessage(hwnd, WM_CLOSE, 0, 0); break;
+		}
+
+		DestroyMenu(cmMain);
+	}break;
+
 	case WM_DESTROY:
 		FreeConsole();
 		PostQuitMessage(0);
 		break;
+
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
 		break;
+
 	default:return DefWindowProc(hwnd, uMsg, wParam, lParam);
-	}
-	return FALSE;
+	}return FALSE;
 }
 VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 {
